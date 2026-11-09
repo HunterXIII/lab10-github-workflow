@@ -1,0 +1,15 @@
+import unittest
+
+from registration import is_valid_email
+
+
+class EmailValidationTests(unittest.TestCase):
+    def test_valid_addresses(self):
+        for email in ("student@example.com", "first.last+lab@my-domain.example.org"):
+            with self.subTest(email=email):
+                self.assertTrue(is_valid_email(email))
+
+    def test_invalid_addresses(self):
+        for email in ("student.example.com", "student@", "student@example"):
+            with self.subTest(email=email):
+                self.assertFalse(is_valid_email(email))
