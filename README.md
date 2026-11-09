@@ -31,7 +31,7 @@ Email подходит для регистрации.
 
 ## Работа с GitHub
 
-Все три роли выполнил самостоятельно. Создал [issue #1](https://github.com/HunterXIII/lab10-github-workflow/issues/1) и отдельные ветки с двумя коммитами в каждой.
+Все три роли выполнил самостоятельно. Создал [issue #1](https://github.com/HunterXIII/lab10-github-workflow/issues/1) и отдельные ветки. В каждой есть исходный коммит и правки после саморевью.
 
 - `feature/1-validation` — проверка формата email. [PR #2](https://github.com/HunterXIII/lab10-github-workflow/pull/2)
 - `feature/1-tests` — тесты основных и крайних случаев. [PR #3](https://github.com/HunterXIII/lab10-github-workflow/pull/3)
@@ -41,7 +41,7 @@ Email подходит для регистрации.
 
 Каждый PR содержит `Closes #1`. При первом слиянии в `main` GitHub автоматически закрывает issue. [Автозакрытие issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue)
 
-Репозиторий приватный. На GitHub Free защита веток в приватных репозиториях недоступна. Для слияния нужен approve от другого участника. PR оставлены открытыми до его получения.
+Репозиторий публичный. [Правило защиты main](https://github.com/HunterXIII/lab10-github-workflow/rules/26859646) запрещает прямой push и требует PR с одним approve. Для слияния нужен approve от другого участника. PR оставлены открытыми до его получения.
 
 ## Вопросы к защите
 
