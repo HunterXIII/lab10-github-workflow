@@ -20,6 +20,7 @@ jobs:
         run: |
           mkdir build
           cp registration.py build/__main__.py
+          cp config.py build/
           python -m zipapp build -o registration.pyz
       - uses: actions/upload-artifact@v4
         with:

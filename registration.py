@@ -1,5 +1,7 @@
 import re
 
+from config import INVALID_EMAIL_MESSAGE, VALID_EMAIL_MESSAGE
+
 
 def is_valid_email(email):
     # Точка разделяет части имени. Дефис допустим внутри части домена.
@@ -11,6 +13,6 @@ def is_valid_email(email):
 if __name__ == "__main__":
     email = input("Введите email: ")
     if is_valid_email(email):
-        print("Email подходит для регистрации.")
+        print(VALID_EMAIL_MESSAGE)
     else:
-        print("Некорректный email.")
+        print(INVALID_EMAIL_MESSAGE)
