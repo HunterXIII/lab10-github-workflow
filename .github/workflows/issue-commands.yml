@@ -1,0 +1,26 @@
+name: Команды issue
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  command:
+    if: github.event.comment.author_association == 'OWNER' && !github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            const issue = { ...context.repo, issue_number: context.issue.number };
+            const text = context.payload.comment.body.trim();
+            const assign = text.match(/^\/assign @([a-z\d][a-z\d-]{0,38})$/i);
+            const label = text.match(/^\/label (bug|feature|tech-debt)$/);
+
+            if (assign) {
+              await github.rest.issues.addAssignees({ ...issue, assignees: [assign[1]] });
+            } else if (label) {
+              await github.rest.issues.addLabels({ ...issue, labels: [label[1]] });
+            }
