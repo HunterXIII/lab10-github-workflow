@@ -1,0 +1,42 @@
+name: Staging
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -B -m unittest -v
+      - name: Собрать сайт и приложение
+        run: |
+          mkdir build site
+          cp registration.py build/__main__.py
+          cp config.py build/
+          python -m zipapp build -o site/registration.pyz
+          cp staging/index.html site/
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+  deploy-staging:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: staging
+      url: ${{ steps.publish.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: publish
