@@ -18,3 +18,8 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install bandit==1.8.6
       - run: python -m bandit registration.py config.py -f json -o bandit-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-report
+          path: bandit-report.json
