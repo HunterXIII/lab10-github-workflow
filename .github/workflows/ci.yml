@@ -49,4 +49,51 @@ jobs:
           cache: pip
           cache-dependency-path: .github/requirements-ci.txt
       - run: python -m pip install -r .github/requirements-ci.txt
-      - run: python -m pytest
+      - run: python -m pytest --junitxml=reports-ci/junit.xml --cov=registration --cov-report=xml:reports-ci/coverage.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: reports-ci
+  experimental-format:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .github/requirements-ci.txt
+      - run: python -m pip install -r .github/requirements-ci.txt
+      - run: ruff format --check registration.py test_registration.py
+  experimental-preview:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .github/requirements-ci.txt
+      - run: python -m pip install -r .github/requirements-ci.txt
+      - run: ruff check --preview --select B,UP registration.py test_registration.py
+  package:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: application
+      - uses: actions/download-artifact@v4
+        with:
+          name: test-reports
+          path: reports-ci
+      - run: tar -czf registration-package.tar.gz registration.pyz reports-ci
+      - uses: actions/upload-artifact@v4
+        with:
+          name: registration-package
+          path: registration-package.tar.gz
