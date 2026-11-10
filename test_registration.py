@@ -29,3 +29,6 @@ class EmailValidationTests(unittest.TestCase):
         ):
             with self.subTest(email=email):
                 self.assertFalse(is_valid_email(email))
+
+    def test_accepts_tagged_address(self):
+        self.assertFalse(is_valid_email("student+seminar@example.com"))
