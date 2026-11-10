@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   test:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -29,6 +30,7 @@ jobs:
         with:
           path: site
   deploy-staging:
+    if: github.ref == 'refs/heads/main'
     needs: test
     runs-on: ubuntu-latest
     permissions:
@@ -38,5 +40,11 @@ jobs:
       name: staging
       url: ${{ steps.publish.outputs.page_url }}
     steps:
+      - name: Проверить наличие секрета
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: |
+          test -n "$API_TOKEN"
+          echo "Секрет staging настроен."
       - uses: actions/deploy-pages@v4
         id: publish
