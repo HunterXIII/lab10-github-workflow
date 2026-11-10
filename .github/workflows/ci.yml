@@ -1,0 +1,52 @@
+name: CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Собрать zipapp
+        run: |
+          mkdir build
+          cp registration.py build/__main__.py
+          python -m zipapp build -o registration.pyz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: application
+          path: registration.pyz
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .github/requirements-ci.txt
+      - run: python -m pip install -r .github/requirements-ci.txt
+      - run: ruff check --output-format=github --select E,F,D registration.py test_registration.py
+  test:
+    needs: [build, lint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .github/requirements-ci.txt
+      - run: python -m pip install -r .github/requirements-ci.txt
+      - run: python -m pytest
