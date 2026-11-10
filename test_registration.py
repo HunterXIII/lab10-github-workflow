@@ -31,4 +31,4 @@ class EmailValidationTests(unittest.TestCase):
                 self.assertFalse(is_valid_email(email))
 
     def test_accepts_tagged_address(self):
-        self.assertFalse(is_valid_email("student+seminar@example.com"))
+        self.assertTrue(is_valid_email("student+seminar@example.com"))
