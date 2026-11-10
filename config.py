@@ -1,2 +1,2 @@
-VALID_EMAIL_MESSAGE = "Адрес принят."
+VALID_EMAIL_MESSAGE = "Email подходит. Можно продолжить регистрацию."
 INVALID_EMAIL_MESSAGE = "Некорректный email."
